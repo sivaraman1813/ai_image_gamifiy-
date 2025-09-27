@@ -12,7 +12,7 @@ const gridSizeSelect = document.getElementById("grid-size-select");
 const voiceBtn = document.getElementById("voice-btn");
 
 // Configuration
-const API_KEY = "vk-mFOBg3cgo90fNuXdnXZB19nwOk5nDSDjCyUau2IRe4IOiQ";
+const API_KEY = "vk-7iXAG4eXZD02Fh1U3n9y1wivZwOwFUbwBwZ4jaaV9PKAmg";
 const API_URL = "https://api.vyro.ai/v2/image/generations";
 
 // Track active puzzles
@@ -95,8 +95,15 @@ const validateForm = () => {
   clearErrors();
   let hasError = false;
 
-  if (!promptInput.value.trim()) {
+  const promptValue = promptInput.value.trim();
+
+  if (!promptValue) {
     showError("error-prompt", "Prompt is required.");
+    hasError = true;
+  } 
+  // Only English letters and spaces
+  else if (!/^[a-zA-Z\s]+$/.test(promptValue)) {
+    showError("error-prompt", "Prompt can only contain English letters and spaces.");
     hasError = true;
   }
 
@@ -122,6 +129,7 @@ const validateForm = () => {
 
   return !hasError;
 };
+
 
 // Show/Hide Images Feature - Updated
 const createImageToggleControl = () => {
