@@ -1,3 +1,4 @@
+
 // DOM Elements
 const promptForm = document.querySelector(".prompt-form");
 const themeToggle = document.querySelector(".theme-toggle");
@@ -12,9 +13,9 @@ const gridSizeSelect = document.getElementById("grid-size-select");
 const voiceBtn = document.getElementById("voice-btn");
 
 // Configuration
-const API_KEY = "vk-7iXAG4eXZD02Fh1U3n9y1wivZwOwFUbwBwZ4jaaV9PKAmg";
-const API_URL = "https://api.vyro.ai/v2/image/generations";
-
+const API_KEY = "92f7e3bc3bmsh733712ad0f3dfc1p1ccdcdjsna2bb377335e2";
+const API_URL =
+"https://ai-text-to-image-generator-flux-free-api.p.rapidapi.com/aaaaaaaaaaaaaaaaaiimagegenerator/quick.php";
 // Track active puzzles
 let activePuzzles = 0;
 
@@ -102,8 +103,9 @@ const validateForm = () => {
     hasError = true;
   } 
   // Only English letters and spaces
-  else if (!/^[a-zA-Z\s]+$/.test(promptValue)) {
-    showError("error-prompt", "Prompt can only contain English letters and spaces.");
+ 
+  else if (!/^[a-zA-Z0-9\s.,!?'":;()\-@#$%&*]+$/.test(promptValue)) {
+    showError("error-prompt", "Prompt can only contain English letters and common symbols.");
     hasError = true;
   }
 
@@ -493,58 +495,95 @@ const updateImageCard = (index, imageUrl) => {
   }
 };
 
-const generateImages = async (selectedModel, imageCount, aspectRatio, promptText) => {
-  const { width, height } = getImageDimensions(aspectRatio);
+const generateImages = async (
+  selectedModel,
+  imageCount,
+  aspectRatio,
+  promptText
+) => {
   generateBtn.setAttribute("disabled", "true");
   generateBtn.textContent = "Generating...";
 
-  const imagePromises = Array.from({ length: imageCount }, async (_, i) => {
-    try {
-      const formData = new FormData();
-      formData.append("prompt", promptText);
-      formData.append("style", "realistic");
-      formData.append("aspect_ratio", aspectRatio);
-      formData.append("seed", Math.floor(Math.random() * 1000000).toString());
-      formData.append("width", width);
-      formData.append("height", height);
+  // Convert ratio format: 1/1 → 1-1
+  const formattedRatio = aspectRatio.replace("/", "-");
 
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${API_KEY}` },
-        body: formData,
-      });
+  const imagePromises = Array.from(
+    { length: imageCount },
+    async (_, i) => {
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "x-rapidapi-key": API_KEY,
+            "x-rapidapi-host":
+              "ai-text-to-image-generator-flux-free-api.p.rapidapi.com",
+            "Content-Type": "application/json",
+          },
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || "Image generation failed");
-      }
+          body: JSON.stringify({
+            prompt: promptText,
+            style_id: 4,
+            size: formattedRatio,
+          }),
+        });
 
-      const contentType = response.headers.get("Content-Type");
-      if (contentType && contentType.startsWith("image")) {
-        const blob = await response.blob();
-        const imageUrl = URL.createObjectURL(blob);
-        updateImageCard(i, imageUrl);
-      } else {
+        console.log("Status:", response.status);
+
         const data = await response.json();
-        if (!data.image_url) throw new Error("No image URL returned");
-        updateImageCard(i, data.image_url);
-      }
-    } catch (error) {
-      console.error(error);
-      const imgCard = document.getElementById(`img-card-${i}`);
-      if (imgCard) {
-        imgCard.classList.replace("loading", "error");
-        const statusText = imgCard.querySelector(".status-text");
-        if (statusText) statusText.textContent = "Generation failed!";
+        console.log("API Response:", data);
+
+        if (!response.ok) {
+          throw new Error(
+            data.message || "Image generation failed"
+          );
+        }
+
+        // Change based on actual API response
+    // Get image from RapidAPI response
+const imageUrl =
+  data.final_result?.[i]?.origin ||
+  data.final_result?.[i]?.image ||
+  data.final_result?.[i]?.url ||
+  data.image_url ||
+  data.url ||
+  data.output?.[0];
+
+console.log("Image URL:", imageUrl);
+
+if (!imageUrl) {
+  console.log("Full API Data:", data);
+  throw new Error("No image returned");
+}
+        updateImageCard(i, imageUrl);
+      } catch (error) {
+        console.error("Generation Error:", error);
+
+        const imgCard =
+          document.getElementById(`img-card-${i}`);
+
+        if (imgCard) {
+          imgCard.classList.replace(
+            "loading",
+            "error"
+          );
+
+          const statusText =
+            imgCard.querySelector(".status-text");
+
+          if (statusText) {
+            statusText.textContent =
+              "Generation failed!";
+          }
+        }
       }
     }
-  });
+  );
 
   await Promise.allSettled(imagePromises);
+
   generateBtn.removeAttribute("disabled");
   generateBtn.textContent = "Generate Images";
-  
-  // Show toggle control after images are generated
+
   createImageToggleControl();
 };
 
