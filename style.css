@@ -6,6 +6,7 @@
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
 }
+
 :root {
   --color-primary: #5C56E1;
   --color-primary-dark: #5b21b6;
@@ -17,6 +18,8 @@
   --color-border: #D4D4ED;
   --color-gradient: linear-gradient(135deg, #0d00ff, #3703b0);
 }
+
+/* ─── Dark Theme ─────────────────────────────────────────────── */
 body.dark-theme {
   --color-card: #1E293B;
   --color-input: #141B2D;
@@ -24,51 +27,43 @@ body.dark-theme {
   --color-placeholder: #A3B6DC;
   --color-border: #334155;
   background: var(--color-card);
-  background-image: radial-gradient(circle at 15% 50%, #6366f126 0%, transparent 35%), radial-gradient(circle at 85% 30%, #8b5cf626 0%, transparent 35%), radial-gradient(circle at 50% 80%, #6366f11a 0%, transparent 40%);
+  background-image:
+    radial-gradient(circle at 15% 50%, #6366f126 0%, transparent 35%),
+    radial-gradient(circle at 85% 30%, #8b5cf626 0%, transparent 35%),
+    radial-gradient(circle at 50% 80%, #6366f11a 0%, transparent 40%);
 }
+
+/* ─── Body ───────────────────────────────────────────────────── */
 body {
   display: flex;
   width: 100%;
   padding: 15px;
-  align-items: center;
+  padding-top: 130px; /* push container down so logo doesn't overlap */
+  align-items: flex-start;
   justify-content: center;
   min-height: 100vh;
   color: var(--color-text);
   background-image: linear-gradient(#E9E9FF, #C8C7FF);
 }
-.container {
-  width: 900px;
-  padding: 32px;
-  border-radius: 23px;
-  position: relative;
-  background: var(--color-card);
-  box-shadow: 0 10px 20px 0 #0000001a;
-  transition: all 0.3s ease;
-  overflow: hidden;
+
+body:not(.dark-theme) {
+  background: linear-gradient(90deg, #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #d4baff);
+  background-attachment: fixed;
+  color: var(--color-text);
 }
-.container::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 6px;
-  background-image: var(--color-gradient);
-}
-body.dark-theme .container {
-  border: 1px solid var(--color-border);
-}
+
+/* ─── Top-Left Logo (fixed, outside container) ───────────────── */
 .top-left-logo {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+  position: fixed;
+  top: 15px;
+  left: 15px;
   z-index: 1000;
   padding: 8px;
-  background: rgba(255, 255, 255, 0.1); /* Subtle background */
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  backdrop-filter: blur(5px); /* Frosted glass effect */
 }
 
 .top-left-logo:hover {
@@ -83,18 +78,48 @@ body.dark-theme .container {
   display: block;
 }
 
+/* ─── Container ──────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: 900px;
+  padding: 32px;
+  border-radius: 23px;
+  position: relative;
+  background: var(--color-card);
+  box-shadow: 0 10px 20px 0 #0000001a;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
 
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background-image: var(--color-gradient);
+}
+
+body.dark-theme .container {
+  border: 1px solid var(--color-border);
+}
+
+/* ─── Header ─────────────────────────────────────────────────── */
 .header {
   display: flex;
   align-items: center;
   margin-bottom: 32px;
   justify-content: space-between;
+  gap: 12px;
 }
+
 .header .logo-wrapper {
   display: flex;
   gap: 10px;
   align-items: center;
 }
+
 .header .logo-wrapper .logo {
   height: 45px;
   width: 45px;
@@ -107,10 +132,19 @@ body.dark-theme .container {
   justify-content: center;
   background-image: var(--color-gradient);
 }
+
 .header .logo-wrapper h1 {
   font-size: 1.9rem;
   font-weight: 700;
 }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
 .header .theme-toggle {
   height: 43px;
   width: 43px;
@@ -126,25 +160,50 @@ body.dark-theme .container {
   border: 1px solid var(--color-border);
   transition: all 0.3s ease;
 }
+
 .header .theme-toggle:hover {
   color: var(--color-primary);
   transform: translateY(-2px);
   box-shadow: 0 4px 6px -1px #0000001a;
 }
+
+.demo-btn {
+  background-color: #00b894;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.3s ease;
+  white-space: nowrap;
+}
+
+.demo-btn:hover {
+  background-color: #019875;
+}
+
+/* ─── Main Content ───────────────────────────────────────────── */
 .main-content {
   margin: 35px 0 5px 0;
 }
+
+/* ─── Prompt Container ───────────────────────────────────────── */
 .prompt-container {
   position: relative;
   width: 100%;
   margin-bottom: 20px;
 }
+
 .prompt-container .prompt-input {
   width: 100%;
   line-height: 1.6;
   resize: vertical;
   font-size: 1.05rem;
   padding: 16px 20px;
+  padding-right: 90px;
   min-height: 120px;
   border-radius: 15px;
   color: var(--color-text);
@@ -152,19 +211,21 @@ body.dark-theme .container {
   border: 1px solid var(--color-border);
   transition: all 0.3s ease;
 }
+
 .prompt-container .prompt-input:focus {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 4px #8b5cf626;
   outline: none;
 }
+
 .prompt-container .prompt-input::placeholder {
   color: var(--color-placeholder);
 }
+
 .prompt-container .prompt-btn,
 .prompt-container #voice-btn {
   position: absolute;
-  right: 15px; /* Adjust positioning as needed */
-  bottom: 15px; /* Adjust positioning as needed */
+  bottom: 15px;
   height: 35px;
   width: 35px;
   display: flex;
@@ -182,43 +243,45 @@ body.dark-theme .container {
 
 .prompt-container .prompt-btn:hover,
 .prompt-container #voice-btn:hover {
-  opacity: 1 !important;
+  opacity: 1;
   transform: translateY(-2px);
   box-shadow: 0 4px 6px -1px #0000001a;
 }
 
-/* Adjust positioning for each button to prevent overlap */
 .prompt-container .prompt-btn {
-  right: 65px; /* Adjust the position for the random prompt button */
+  right: 60px;
 }
 
 .prompt-container #voice-btn {
-  right: 15px; /* Adjust the position for the voice button */
+  right: 15px;
 }
 
+/* ─── Prompt Actions ─────────────────────────────────────────── */
 .main-content .prompt-actions {
   display: grid;
   gap: 15px;
-  grid-template-columns: 1.2fr 1fr 1.1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
 }
+
 .prompt-actions .select-wrapper {
   position: relative;
 }
+
 .prompt-actions .select-wrapper::after {
   content: "\f078";
   font-family: "Font Awesome 6 Free";
   font-weight: 900;
   position: absolute;
   right: 20px;
-  top: 50%;
+  top: 22px;
   padding-left: 7px;
   background: var(--color-input);
-  transform: translateY(-50%);
   color: var(--color-placeholder);
   pointer-events: none;
   font-size: 0.9rem;
   transition: all 0.3s ease;
 }
+
 .prompt-actions :where(.custom-select, .generate-btn) {
   border-radius: 10px;
   cursor: pointer;
@@ -229,16 +292,19 @@ body.dark-theme .container {
   border: 1px solid var(--color-border);
   transition: all 0.3s ease;
 }
+
 .prompt-actions .select-wrapper .custom-select {
   width: 100%;
   outline: none;
   height: 100%;
   appearance: none;
 }
+
 .prompt-actions .custom-select:is(:focus, :hover) {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px #8b5cf61a;
 }
+
 .prompt-actions .generate-btn {
   display: flex;
   gap: 12px;
@@ -249,10 +315,9 @@ body.dark-theme .container {
   justify-content: center;
   padding: 12px 25px;
   background-image: var(--color-gradient);
-  grid-column: span 4; /* makes it take full row if 4-column layout */
+  grid-column: span 4;
   justify-self: center;
-  margin-top: 10px; /* 
-  centers it within the row */
+  margin-top: 10px;
   width: 200px;
 }
 
@@ -260,18 +325,23 @@ body.dark-theme .container {
   transform: translateY(-2px);
   box-shadow: 0 4px 10px #6d28d94d;
 }
+
 .prompt-actions .generate-btn:disabled {
   opacity: 0.6;
   pointer-events: none;
 }
+
+/* ─── Gallery Grid ───────────────────────────────────────────── */
 .main-content .gallery-grid {
   display: grid;
   gap: 15px;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
 }
+
 .main-content .gallery-grid:has(.img-card) {
   margin-top: 30px;
 }
+
 .gallery-grid .img-card {
   display: flex;
   flex-direction: column;
@@ -287,14 +357,17 @@ body.dark-theme .container {
   border: 1px solid var(--color-border);
   box-shadow: 0 1px 2px #0000000d;
 }
+
 .gallery-grid .img-card.animate-in {
   opacity: 1;
   transform: translateY(0);
 }
+
 .gallery-grid .img-card:not(.loading, .error):hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 15px -3px #0000001a;
 }
+
 .gallery-grid .img-card.loading .spinner {
   width: 35px;
   height: 35px;
@@ -303,11 +376,11 @@ body.dark-theme .container {
   border-top-color: var(--color-primary);
   animation: spin 1s linear infinite;
 }
+
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
+
 .gallery-grid .img-card .status-container {
   display: none;
   gap: 13px;
@@ -315,28 +388,34 @@ body.dark-theme .container {
   align-items: center;
   flex-direction: column;
 }
+
 .gallery-grid .img-card:where(.loading, .error) .status-container {
   display: flex;
 }
+
 .gallery-grid .img-card.error .spinner,
 .gallery-grid .img-card.loading i {
   display: none;
 }
+
 .gallery-grid .img-card .status-container .status-text {
   font-size: 0.85rem;
   text-align: center;
   color: var(--color-placeholder);
 }
+
 .gallery-grid .img-card .status-container i {
   font-size: 1.7rem;
   color: #ef4444;
 }
+
 .gallery-grid .img-card .result-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: all 0.3s ease;
 }
+
 .gallery-grid .img-card .img-overlay {
   position: absolute;
   bottom: 0;
@@ -349,12 +428,15 @@ body.dark-theme .container {
   transition: all 0.3s ease;
   background: linear-gradient(transparent, #000000cc);
 }
+
 .gallery-grid .img-card:hover .img-overlay {
   opacity: 1;
 }
+
 .gallery-grid .img-card:where(.loading, .error) :is(.result-img, .img-overlay) {
   display: none;
 }
+
 .gallery-grid .img-card .img-download-btn {
   height: 45px;
   width: 45px;
@@ -368,73 +450,25 @@ body.dark-theme .container {
   border-radius: 50%;
   background: #ffffff40;
   transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
 }
+
 .gallery-grid .img-card .img-download-btn:hover {
   background: #ffffff66;
   transform: scale(1.05);
 }
-/* Responsive media query code for small screens */
-@media (max-width: 768px) {
-  .container {
-    padding: 18px;
-  }
-  .header .logo-wrapper .logo {
-    height: 50px;
-    width: 51px;
-    font-size: 1.25rem;
-  }
-  .header .logo-wrapper h1 {
-    font-size: 1.7rem;
-  }
-  .main-content .prompt-actions {
-    grid-template-columns: 1fr;
-    margin-top: -10px;
-  }
-  .prompt-actions .generate-btn {
-    margin: 10px 0 0;
-  }
-  .gallery-grid .img-card .img-overlay {
-    opacity: 1;
-  }
-}
+
+/* ─── Puzzle Section ─────────────────────────────────────────── */
 .puzzle-section {
   margin-top: 20px;
   display: flex;
   justify-content: center;
 }
-body:not(.dark-theme) {
-  background: linear-gradient(90deg, #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff, #d4baff);
-  background-attachment: fixed;
-  color: var(--color-text);
-}
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.demo-btn {
-  background-color: #00b894;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-weight: 600;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: background 0.3s ease;
-}
-
-.demo-btn:hover {
-  background-color: #019875;
-}
-
-/* Error Message Styling */
+/* ─── Error Message ──────────────────────────────────────────── */
 .error-message {
   color: #e74c3c;
-  font-size: 18px;
+  font-size: 14px;
   margin-top: 4px;
   display: none;
   font-weight: 500;
@@ -442,17 +476,167 @@ body:not(.dark-theme) {
   padding-left: 4px;
 }
 
-/* Ensure prompt textarea and selects don't overlap errors */
-.prompt-container,
-.select-wrapper {
-  position: relative;
-  margin-bottom: 20px;
-}
-
-/* Optional: Add red border on invalid inputs (you can toggle class in JS if desired) */
 .invalid {
   border-color: #e74c3c !important;
   box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE — Tablet (max 768px)
+═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Logo shrinks and repositions so it doesn't cover the header */
+  .top-left-logo {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    padding: 5px 6px;
+    border-radius: 8px;
+  }
 
+  .top-left-logo img {
+    height: 50px; /* shrink from 100px to 50px on mobile */
+  }
+
+  /* Body top padding matches the smaller logo height */
+  body {
+    padding: 10px;
+    padding-top: 75px;
+    align-items: flex-start;
+  }
+
+  .container {
+    padding: 16px 14px 20px;
+    border-radius: 16px;
+  }
+
+  .header {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .header .logo-wrapper .logo {
+    height: 36px;
+    width: 36px;
+    font-size: 1rem;
+    border-radius: 10px;
+  }
+
+  .header .logo-wrapper h1 {
+    font-size: 1.2rem;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .header .theme-toggle {
+    height: 36px;
+    width: 36px;
+    font-size: 0.9rem;
+  }
+
+  .demo-btn {
+    padding: 7px 11px;
+    font-size: 0.82rem;
+  }
+
+  .main-content {
+    margin: 16px 0 5px;
+  }
+
+  .prompt-container .prompt-input {
+    font-size: 0.95rem;
+    padding: 13px 15px;
+    padding-right: 85px;
+    min-height: 100px;
+    border-radius: 12px;
+  }
+
+  .prompt-container .prompt-btn {
+    right: 55px;
+    bottom: 12px;
+    height: 32px;
+    width: 32px;
+  }
+
+  .prompt-container #voice-btn {
+    right: 12px;
+    bottom: 12px;
+    height: 32px;
+    width: 32px;
+  }
+
+  /* Selects: single column */
+  .main-content .prompt-actions {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .prompt-actions .generate-btn {
+    grid-column: span 1;
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  /* Gallery: 2 columns */
+  .main-content .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .gallery-grid .img-card .img-overlay {
+    opacity: 1;
+  }
+
+  .gallery-grid .img-card .img-download-btn {
+    height: 38px;
+    width: 38px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE — Small phones (max 420px)
+═══════════════════════════════════════════════════════════════ */
+@media (max-width: 420px) {
+  .top-left-logo img {
+    height: 38px;
+  }
+
+  body {
+    padding-top: 62px;
+  }
+
+  .container {
+    padding: 12px 10px 16px;
+    border-radius: 12px;
+  }
+
+  .header .logo-wrapper h1 {
+    font-size: 1rem;
+  }
+
+  .header .logo-wrapper .logo {
+    height: 30px;
+    width: 30px;
+    font-size: 0.9rem;
+  }
+
+  .main-content .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .prompt-container .prompt-input {
+    font-size: 0.88rem;
+    padding: 11px 13px;
+    padding-right: 80px;
+  }
+
+  .prompt-actions :where(.custom-select, .generate-btn) {
+    font-size: 0.9rem;
+    padding: 11px 15px;
+  }
+}
